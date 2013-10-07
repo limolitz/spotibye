@@ -23,9 +23,9 @@ As you'll probably not posess all your songs you have in a Spotify playlist as a
 I am using [https://github.com/jlund/spotify-export spotify-export] to make requests to the Spotify API to get the metadata from Spotify.
 * Clone this repo: <code>git clone git://github.com/jlund/spotify-export.git</code>
 
-(K)Ubuntu is usually missing ruby1.9.1-de, sqlite3-doc und libsqlite3-dev to execute correctly.
+(K)Ubuntu is usually missing ruby1.9.1-de, sqlite3-doc, libsqlite3-dev and ruby-progressbar to execute correctly.
 * <code>sudo apt-get install ruby1.9.1-de sqlite3-doc libsqlite3-dev</code>
-* <code>cd spotify-export</code>
+* <code>sudo gem install ruby-progressbar</code>
 * Follow the instructions [https://github.com/jlund/spotify-export/blob/master/README.md]. I named the file pl_spot.txt.
 ** Open Spotify and go to the playlist that you want to export
 ** Select the tracks that you want to export (Ctrl-A or Cmd-A to Select All)
@@ -45,8 +45,8 @@ Now we will call spotify-export. As it has (had) some bugs, it is called in a lo
 In the file <code>pl_ta.txt</code> we have now the format
  Title -- Artist -- Album
 
- ====Plaintext to Playlist====
- To use these files I wrote a QTScript for Amarok. It takes the metadata from the files, searches (very fuzzily) for a corresponding song and adds the results to the current playlist. As a result from the fuzzy search, songs with multiple version might get added multiple times, so there's probably still some manual work necessary. As I am not very good with QTScript, we'll need to set some variables manually.
+====Plaintext to Playlist====
+To use these files I wrote a QTScript for Amarok. It takes the metadata from the files, searches (very fuzzily) for a corresponding song and adds the results to the current playlist. As a result from the fuzzy search, songs with multiple version might get added multiple times, so there's probably still some manual work necessary. As I am not very good with QTScript, we'll need to set some variables manually.
 
 In order to get Amarok to use the script, copy the file to the correct location and edit the file afterwards:
 
