@@ -71,5 +71,3 @@ The script might run as it is activated, if this is not the case, select the Scr
 An alert will show the missing files. (If anybody knows how to write files using QtScript, let me know how to do this.)
 
 Now the playlist can be saved by clicking on the disk symbol on the bottom. The playlist manager will open on the right side where the playlist can be exported with a right click.
-
-https://florin.leo.uberspace.de/piwik/piwik.php?idsite=3&amp;rec=1&amp;action_name=Spotibye
