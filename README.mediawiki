@@ -1,0 +1,73 @@
+==spotibye==
+
+Project for Linux which exports Spotify playlists to classical .m3u playlists
+===Requirements===
+
+* Amarok
+* [https://github.com/jlund/spotify-export spotify-export]
+
+===How to use===
+
+This How-To is loosely based on my blog post at [http://blog.wasmitnetzen.de/?p=192] (in german) which describes the usage as of May 2013.
+
+You can divide this process into two main parts: first to export the metadata of each song from Spotify and as a second step to build classical .m3u playlists from the data.
+
+As you'll probably not posess all your songs you have in a Spotify playlist as a mp3, you'll get a list of missing files at the end. (Unfortunately, this list is not very nicely formatted at the moment as I am not very good with QtScript. Any input is appreciated.)
+
+====Export metadata from Spotify====
+
+* cd
+* Clone this repo: <code>git clone git://github.com/wasmitnetzen/spotibye.git</code>
+* <code>cd spotibye</code>
+
+I am using [https://github.com/jlund/spotify-export spotify-export] to make requests to the Spotify API to get the metadata from Spotify.
+* Clone this repo: <code>git clone git://github.com/jlund/spotify-export.git</code>
+
+(K)Ubuntu is usually missing ruby1.9.1-de, sqlite3-doc und libsqlite3-dev to execute correctly.
+* <code>sudo apt-get install ruby1.9.1-de sqlite3-doc libsqlite3-dev</code>
+* <code>cd spotify-export</code>
+* Follow the instructions [https://github.com/jlund/spotify-export/blob/master/README.md]. I named the file pl_spot.txt.
+** Open Spotify and go to the playlist that you want to export
+** Select the tracks that you want to export (Ctrl-A or Cmd-A to Select All)
+** Right-click on the selected tracks and choose "Copy Spotify URI" from the menu
+** Go to the text editor of your choice and Paste
+** Save the file as pl_spot.txt
+
+As the result is written in one long line and contains local files which are not available on Spotify, we seperate them using sed and grep:
+
+* <code>sed "s/spotify/\\`echo -e '\n\rspotify'`/g" pl_spot.txt | grep ":track" > pl_spot_cloud.txt</code>
+* <code>sed "s/spotify/\\`echo -e '\n\rspotify'`/g" pl_spot.txt | grep ":local" > pl_spot_local.txt</code>
+
+Now we will call spotify-export. As it has (had) some bugs, it is called in a loop until it finishes correctly. The track numbers are removed with awk.
+* <code>until spotify-export/bin/spotify-export.rb pl_spot_cloud.txt; do true; done</code>
+* <code>spotify-export/bin/spotify-export.rb pl_spot_cloud.txt | awk '{$1=""; print $0}' > pl_ta.txt</code>
+
+In the file <code>pl_ta.txt</code> we have now the format
+ Title -- Artist -- Album
+
+ ====Plaintext to Playlist====
+ To use these files I wrote a QTScript for Amarok. It takes the metadata from the files, searches (very fuzzily) for a corresponding song and adds the results to the current playlist. As a result from the fuzzy search, songs with multiple version might get added multiple times, so there's probably still some manual work necessary. As I am not very good with QTScript, we'll need to set some variables manually.
+
+In order to get Amarok to use the script, copy the file to the correct location and edit the file afterwards:
+
+* <code>mkdir ~/.kde/share/apps/amarok/scripts/amarok-spotibye</code>
+* <code>cp amarok-spotibye/* ~/.kde/share/apps/amarok/scripts/amarok-spotibye</code>
+* <code>nano ~/.kde/share/apps/amarok/scripts/amarok-spotibye/main.js</code>
+
+The variables <code>playlist</code> and <code>playlist_local</code> need to be set:
+<code lang="text/javascript">
+var playlist = "/home/$USER/spotibye/pl_ta.txt";
+var playlist_local = "/home/$USER/spotibye/pl_spot_local.txt";
+</code>
+
+Finally we can start Amarok, empty the current playlist (on the right side) as it will be filled by the script and start the script.
+
+* Settings -> Configure Amarok -> Scripts -> activate "Amarok-Spotibye" and "Amarok Script Console"
+
+The script might run as it is activated, if this is not the case, select the Script Console and enter
+
+*<code>Amarok.runScript("Spotibye");</code>
+
+An alert will show the missing files. (If anybody knows how to write files using QtScript, let me know how to do this.)
+
+Now the playlist can be saved by clicking on the disk symbol on the bottom. The playlist manager will open on the right side where the playlist can be exported with a right click.
