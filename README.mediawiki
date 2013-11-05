@@ -20,8 +20,8 @@ As you'll probably not possess all your songs you have in a Spotify playlist as 
 * Clone this repo: <code>git clone git://github.com/wasmitnetzen/spotibye.git</code>
 * <code>cd spotibye</code>
 
-I am using [https://github.com/jlund/spotify-export spotify-export] to make requests to the Spotify API to get the metadata from Spotify.
-* Clone this repo: <code>git clone git://github.com/jlund/spotify-export.git</code>
+* I am using [https://github.com/jlund/spotify-export spotify-export] to make requests to the Spotify API to get the metadata from Spotify. It is embedded as a submodule.
+* Fetch spotify-export: <code>git submodule init && git submodule update</code>
 
 (K)Ubuntu is usually missing ruby1.9.1-de, sqlite3-doc, libsqlite3-dev and ruby-progressbar to execute correctly.
 * <code>sudo apt-get install ruby1.9.1-de sqlite3-doc libsqlite3-dev</code>
@@ -48,7 +48,7 @@ In order to get Amarok to use the script, copy the file to the correct location 
 * <code>cp amarok-spotibye/* ~/.kde/share/apps/amarok/scripts/amarok-spotibye</code>
 * <code>nano ~/.kde/share/apps/amarok/scripts/amarok-spotibye/main.js</code>
 
-The variables <code>playlist</code> needs to be set:
+The variable <code>playlist</code> needs to be set:
 <code lang="text/javascript">
 var playlist = "/home/$USER/spotibye/pl_ta.txt";
 </code>

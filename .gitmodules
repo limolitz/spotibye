@@ -1,0 +1,3 @@
+[submodule "spotify-export"]
+	path = spotify-export
+	url = git@github.com:jlund/spotify-export.git
