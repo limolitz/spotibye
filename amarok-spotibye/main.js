@@ -1,5 +1,5 @@
 Importer.loadQtBinding( "qt.core" );
-Importer.loadQtBinding( "qt.gui" ); 
+Importer.loadQtBinding( "qt.gui" );
 //#include <QFileDialog>
 //Amarok.alert("Spotibye started.");
 //Amarok.Window.Statusbar.setMainText( Amarok.Playlist.totalTrackCount() + " tracks in the playlist");
@@ -9,8 +9,7 @@ Importer.loadQtBinding( "qt.gui" );
 //SELECT * FROM `tracks` JOIN `artists` ON tracks.artist=artists.id JOIN `urls` ON tracks.url=urls.id WHERE MATCH(tracks.title) AGAINST ('%Das Beste%') AND artists.name = 'Silbermond'
 
 // Playlist file
-var playlist = "/home/florin/Cloud/Projekte/Spotify/bh_ta_wo_number.txt";
-var playlist_local = "/home/florin/Cloud/Projekte/Spotify/bh_spot_local.txt";
+var playlist = "/home/florin/Cloud/Projekte/Spotify/spotibye/pl_ta.txt";
 
 QByteArray.prototype.toString = function()
 {
@@ -26,7 +25,7 @@ while (!line.atEnd()) {
 	titles.push(line.readLine().toString());
 }
 f.close();
-//Amarok.alert(titles);
+//Amarok.debug(titles);
 // Lookup in database
 
 var missing = new Array();
@@ -46,7 +45,7 @@ for (var i in titles) {
 			// Remove heading .
 			var url = (result[j]).substr(1);
 			// Add all found audio files to playlist
-			//Amarok.Playlist.addMedia(new QUrl("file:"+url));
+			Amarok.Playlist.addMedia(new QUrl("file:"+url));
 		}
 	} else {
 		Amarok.debug("Not found: "+title+ " -- "+author);
@@ -54,47 +53,6 @@ for (var i in titles) {
 	}
 }
 Amarok.debug("Missing files: "+missing);
-
-// Load local files
-var f = new QFile(playlist_local);
-f.open(QIODevice.ReadWrite);
-var titles_local = new Array();
-var line = new QTextStream(f);
-while (!line.atEnd()) {
-	titles_local.push(line.readLine().toString());
-}
-f.close();
-//Amarok.alert(titles);
-// Lookup in database
-
-var missing = new Array();
-for (var i in titles_local) {
-	// Load encoded data
-	//Amarok.alert("Missing files: "+titles_local[i]);
-	var metadata = titles_local[i].split(":");
-	var author_encoded = metadata[2];
-	var title_encoded = metadata[4];	
-	// Decode
-	var author = decodeURIComponent(author_encoded).replace(/\+/g, " ");
-	var title = decodeURIComponent(title_encoded).replace(/\+/g, " ");
-	Amarok.debug("Missing song: "+author+" - "+title);
-		
-	// Lookup	
-	var result = Amarok.Collection.query("SELECT urls.rpath FROM `tracks` JOIN `artists` on tracks.artist=artists.id JOIN `urls` ON tracks.url=urls.id WHERE (SOUNDEX(tracks.title) = SOUNDEX(\""+title+"\") OR tracks.title LIKE \"%"+title+"%\") AND (artists.name = \""+author+"\" OR SOUNDEX(artists.name) = SOUNDEX(\""+author+"\"))");
-	Amarok.debug("Result of DB query: "+result);
-	if (result.length>0) {
-		for (var j in result) {
-			Amarok.debug("URL: "+result[j]);
-			// Remove heading .
-			var url = (result[j]).substr(1);
-			// Add all found audio files to playlist
-			Amarok.Playlist.addMedia(new QUrl("file:"+url));
-		}
-	} else {
-		Amarok.debug("Not found locally: "+title+ " -- "+author);
-		missing.push(title+ " -- "+author);
-	}
-}
 
 // Save all files without hit
 //var missingFile = new QFile("/home/florin/Cloud/Projekte/Spotify/missing.txt");
@@ -111,3 +69,5 @@ Amarok.alert("Missing files: "+missing);
 for (var j in missing) {
 	Amarok.debug("Missing:	"+missing[j]);
 }
+
+Amarok.end();

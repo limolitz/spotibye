@@ -12,7 +12,7 @@ This How-To is loosely based on my blog post at [http://blog.wasmitnetzen.de/?p=
 
 You can divide this process into two main parts: first to export the metadata of each song from Spotify and as a second step to build classical .m3u playlists from the data.
 
-As you'll probably not posess all your songs you have in a Spotify playlist as a mp3, you'll get a list of missing files at the end. (Unfortunately, this list is not very nicely formatted at the moment as I am not very good with QtScript. Any input is appreciated.)
+As you'll probably not possess all your songs you have in a Spotify playlist as a mp3, you'll get a list of missing files at the end. (Unfortunately, this list is not very nicely formatted at the moment as I am not very good with QtScript. Any input on this is appreciated.)
 
 ====Export metadata from Spotify====
 
@@ -33,14 +33,8 @@ I am using [https://github.com/jlund/spotify-export spotify-export] to make requ
 ** Go to the text editor of your choice and Paste
 ** Save the file as pl_spot.txt
 
-As the result is written in one long line and contains local files which are not available on Spotify, we seperate them using sed and grep:
-
-* <code>sed "s/spotify/\\`echo -e '\n\rspotify'`/g" pl_spot.txt | grep ":track" > pl_spot_cloud.txt</code>
-* <code>sed "s/spotify/\\`echo -e '\n\rspotify'`/g" pl_spot.txt | grep ":local" > pl_spot_local.txt</code>
-
-Now we will call spotify-export. As it has (had) some bugs, it is called in a loop until it finishes correctly. The track numbers are removed with awk.
-* <code>until spotify-export/bin/spotify-export.rb pl_spot_cloud.txt; do true; done</code>
-* <code>spotify-export/bin/spotify-export.rb pl_spot_cloud.txt | awk '{$1=""; print $0}' > pl_ta.txt</code>
+Now we call spotify-export. The track numbers and the progress bar are removed with grep and awk.
+* <code>spotify-export/bin/spotify-export.rb pl_spot.txt | grep "[0-9]*\." | awk '{$1=""; print $0}' > pl_ta.txt</code>
 
 In the file <code>pl_ta.txt</code> we have now the format
  Title -- Artist -- Album
@@ -54,10 +48,9 @@ In order to get Amarok to use the script, copy the file to the correct location 
 * <code>cp amarok-spotibye/* ~/.kde/share/apps/amarok/scripts/amarok-spotibye</code>
 * <code>nano ~/.kde/share/apps/amarok/scripts/amarok-spotibye/main.js</code>
 
-The variables <code>playlist</code> and <code>playlist_local</code> need to be set:
+The variables <code>playlist</code> needs to be set:
 <code lang="text/javascript">
 var playlist = "/home/$USER/spotibye/pl_ta.txt";
-var playlist_local = "/home/$USER/spotibye/pl_spot_local.txt";
 </code>
 
 Finally we can start Amarok, empty the current playlist (on the right side) as it will be filled by the script and start the script.
@@ -66,7 +59,7 @@ Finally we can start Amarok, empty the current playlist (on the right side) as i
 
 The script might run as it is activated, if this is not the case, select the Script Console and enter
 
-*<code>Amarok.runScript("Spotibye");</code>
+*<code>Amarok.runScript("Amarok-Spotibye");</code>
 
 An alert will show the missing files. (If anybody knows how to write files using QtScript, let me know how to do this.)
 
