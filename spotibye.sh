@@ -1,6 +1,4 @@
 #!/bin/bash
-# Clone spotify-export repo
-#git clone git://github.com/jlund/spotify-export.git
 # Make file pl_spot.txt containing the Spotify URLs
 "${EDITOR:-nano}" pl_spot.txt
 

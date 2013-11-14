@@ -30,25 +30,21 @@ As you'll probably not possess all your songs you have in a Spotify playlist as 
 ** Open Spotify and go to the playlist that you want to export
 ** Select the tracks that you want to export (Ctrl-A or Cmd-A to Select All)
 ** Right-click on the selected tracks and choose "Copy Spotify URI" from the menu
-** Go to the text editor of your choice and Paste
-** Save the file as pl_spot.txt
-
-Now we call spotify-export. The track numbers and the progress bar are removed with grep and awk.
-* <code>spotify-export/bin/spotify-export.rb pl_spot.txt | grep "[0-9]*\." | awk '{$1=""; print $0}' > pl_ta.txt</code>
-
-In the file <code>pl_ta.txt</code> we have now the format
+* Run spotibye.sh: <code>./spotibye.sh</code>
+* Paste the copied urls into the text editor and save the file. (If its Nano: Ctrl+S, Ctrl+X).
+* The script queries the Spotify database for the metadata. In the file <code>pl_ta.txt</code> we have now the format
  Title -- Artist -- Album
 
 ====Plaintext to Playlist====
 To use these files I wrote a QTScript for Amarok. It takes the metadata from the files, searches (very fuzzily) for a corresponding song and adds the results to the current playlist. As a result from the fuzzy search, songs with multiple version might get added multiple times, so there's probably still some manual work necessary. As I am not very good with QTScript, we'll need to set some variables manually.
 
-In order to get Amarok to use the script, copy the file to the correct location and edit the file afterwards:
+In order to get Amarok to use the script, link the file to the correct location and edit the file afterwards:
 
-* <code>mkdir ~/.kde/share/apps/amarok/scripts/amarok-spotibye</code>
-* <code>cp amarok-spotibye/* ~/.kde/share/apps/amarok/scripts/amarok-spotibye</code>
-* <code>nano ~/.kde/share/apps/amarok/scripts/amarok-spotibye/main.js</code>
+* <code>cd ~/.kde/share/apps/amarok/scripts/</code>
+* <code>ln -s ~/spotibye/amarok-spotibye AmarokSpotibye</code>
+* <code>nano ~/.kde/share/apps/amarok/scripts/AmarokSpotibye/main.js</code>
 
-The variable <code>playlist</code> needs to be set:
+The variable <code>playlist</code> needs to be set, usually you just need to replace $USER with your username:
 <code lang="text/javascript">
 var playlist = "/home/$USER/spotibye/pl_ta.txt";
 </code>
@@ -59,7 +55,7 @@ Finally we can start Amarok, empty the current playlist (on the right side) as i
 
 The script might run as it is activated, if this is not the case, select the Script Console and enter
 
-*<code>Amarok.runScript("Amarok-Spotibye");</code>
+*<code>Amarok.runScript("AmarokSpotibye");</code>
 
 An alert will show the missing files. (If anybody knows how to write files using QtScript, let me know how to do this.)
 

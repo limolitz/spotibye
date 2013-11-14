@@ -54,6 +54,7 @@ for (var i in titles) {
 }
 Amarok.debug("Missing files: "+missing);
 
+
 // Save all files without hit
 //var missingFile = new QFile("/home/florin/Cloud/Projekte/Spotify/missing.txt");
 //if (missingFile.open(QFile.WriteOnly | QFile.Truncate)) {
