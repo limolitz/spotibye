@@ -31,7 +31,7 @@ As you'll probably not possess all your songs you have in a Spotify playlist as 
 ** Select the tracks that you want to export (Ctrl-A or Cmd-A to Select All)
 ** Right-click on the selected tracks and choose "Copy Spotify URI" from the menu
 * Run spotibye.sh: <code>./spotibye.sh</code>
-* Paste the copied urls into the text editor and save the file. (If its Nano: Ctrl+S, Ctrl+X).
+* Paste the copied urls into the text editor and save the file. (If its Nano: Ctrl+O, Ctrl+X).
 * The script queries the Spotify database for the metadata. In the file <code>pl_ta.txt</code> we have now the format
  Title -- Artist -- Album
 
