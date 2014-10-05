@@ -23,9 +23,9 @@ As you'll probably not possess all your songs you have in a Spotify playlist as 
 * I am using [https://github.com/jlund/spotify-export spotify-export] to make requests to the Spotify API to get the metadata from Spotify. It is embedded as a submodule.
 * Fetch spotify-export: <code>git submodule init && git submodule update</code>
 
-(K)Ubuntu is usually missing ruby1.9.1-de, sqlite3-doc, libsqlite3-dev and ruby-progressbar to execute correctly.
+(K/X)Ubuntu is usually missing ruby1.9.1-de, sqlite3-doc, libsqlite3-dev and some ruby gems to execute correctly.
 * <code>sudo apt-get install ruby1.9.1-de sqlite3-doc libsqlite3-dev</code>
-* <code>sudo gem install ruby-progressbar</code>
+* <code>sudo gem install ruby-progressbar sqlite3 activerecord bundler</code>
 * Follow the instructions [https://github.com/jlund/spotify-export/blob/master/README.md]. I named the file pl_spot.txt.
 ** Open Spotify and go to the playlist that you want to export
 ** Select the tracks that you want to export (Ctrl-A or Cmd-A to Select All)
