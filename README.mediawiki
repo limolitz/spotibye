@@ -40,7 +40,7 @@ To use these files I wrote a QTScript for Amarok. It takes the metadata from the
 
 In order to get Amarok to use the script, link the file to the correct location and edit the file afterwards:
 
-* <code>cd ~/.kde/share/apps/amarok/scripts/</code>
+* <code>cd ~/.kde/share/apps/amarok/scripts/</code> (the folder may not exist)
 * <code>ln -s ~/spotibye/amarok-spotibye AmarokSpotibye</code>
 * <code>nano ~/.kde/share/apps/amarok/scripts/AmarokSpotibye/main.js</code>
 
@@ -49,7 +49,7 @@ The variable <code>playlist</code> needs to be set, usually you just need to rep
 var playlist = "/home/$USER/spotibye/pl_ta.txt";
 </code>
 
-Finally we can start Amarok, empty the current playlist (on the right side) as it will be filled by the script and start the script.
+Finally we can start Amarok. Wait for Amarok to fully index your music, then empty the current playlist (on the right side) as it will be filled by the script and start the script.
 
 * Settings -> Configure Amarok -> Scripts -> activate "Amarok-Spotibye" and "Amarok Script Console"
 
